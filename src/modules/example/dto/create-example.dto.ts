@@ -1,4 +1,12 @@
-import { IsString, IsOptional, IsBoolean, Length } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  Length,
+  IsInt,
+  Min,
+  Max,
+} from 'class-validator';
 
 export class CreateExampleDto {
   @IsString()
@@ -12,4 +20,10 @@ export class CreateExampleDto {
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
+
+  @IsInt()
+  @Min(0)
+  @Max(100)
+  @IsOptional()
+  priority?: number;
 }

@@ -15,7 +15,7 @@ export const databaseConfig = registerAs('database', () => {
   const dbConfigs = {
     postgres: {
       type: 'postgres',
-      host: isDocker ? 'postgres' : (process.env.POSTGRES_HOST || 'localhost'),
+      host: isDocker ? 'postgres' : process.env.POSTGRES_HOST || 'localhost',
       port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
       username: process.env.POSTGRES_USERNAME || 'postgres',
       password: process.env.POSTGRES_PASSWORD || 'postgres',
@@ -23,7 +23,7 @@ export const databaseConfig = registerAs('database', () => {
     },
     mysql: {
       type: 'mysql',
-      host: isDocker ? 'mysql' : (process.env.MYSQL_HOST || 'localhost'),
+      host: isDocker ? 'mysql' : process.env.MYSQL_HOST || 'localhost',
       port: parseInt(process.env.MYSQL_PORT || '3306', 10),
       username: process.env.MYSQL_USERNAME || 'mysql',
       password: process.env.MYSQL_PASSWORD || 'mysql',
