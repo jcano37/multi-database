@@ -24,7 +24,8 @@
     "typeorm:create-migration": "npm run typeorm -- migration:create -n",
     "typeorm:run-migrations": "npm run typeorm -- migration:run",
     "typeorm:revert-migration": "npm run typeorm -- migration:revert",
-    "docker:reset": "pwsh ./scripts/reset-and-rebuild.ps1"
+    "docker:reset": "pwsh ./scripts/reset-and-rebuild.ps1",
+    "docker:update": "pwsh ./scripts/update-and-restart.ps1"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

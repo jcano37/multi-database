@@ -11,34 +11,63 @@ services:
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=${PORT:-3000}
       - IS_DOCKER=true
-      - DB_TYPE=${DB_TYPE:-postgres}
-      - DB_HOST=${DB_HOST:-postgres}
-      - DB_PORT=${DB_PORT:-5432}
-      - DB_USERNAME=${DB_USERNAME:-postgres}
-      - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_DATABASE=${DB_DATABASE:-multidb}
+      - ACTIVE_DB=${ACTIVE_DB:-postgres}
+      # PostgreSQL Config
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE:-multidb}
+      # MySQL Config
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USERNAME=${MYSQL_USERNAME:-mysql}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-mysql}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-multidb}
+      # SQLite Config
+      - SQLITE_PATH=${SQLITE_PATH:-:memory:}
+      # Common Config
       - DB_SYNCHRONIZE=${DB_SYNCHRONIZE:-true}
       - DB_LOGGING=${DB_LOGGING:-true}
-      - DB_SQLITE_PATH=${DB_SQLITE_PATH:-:memory:}
     depends_on:
       postgres:
+        condition: service_healthy
+      mysql:
         condition: service_healthy
 
   postgres:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_USER=${DB_USERNAME:-postgres}
-      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
-      - POSTGRES_DB=${DB_DATABASE:-multidb}
+      - POSTGRES_USER=${POSTGRES_USERNAME:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DATABASE:-multidb}
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME:-postgres}"]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+      - MYSQL_USER=${MYSQL_USERNAME:-mysql}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-mysql}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-multidb}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    command: --default-authentication-plugin=mysql_native_password
 
   adminer:
     image: adminer
@@ -46,6 +75,8 @@ services:
       - "${ADMINER_PORT:-8080}:8080"
     depends_on:
       - postgres
+      - mysql
 
 volumes:
-  postgres_data: 
+  postgres_data:
+  mysql_data: 
