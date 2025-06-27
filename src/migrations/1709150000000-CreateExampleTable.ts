@@ -47,7 +47,7 @@ export class CreateExampleTable1709150000000 implements MigrationInterface {
       true,
     );
 
-    // Para MySQL, necesitamos configurar el trigger para UUID
+    // For MySQL, we need to configure the trigger for UUID
     if (isMySql) {
       await queryRunner.query(`
                 CREATE TRIGGER before_insert_examples

@@ -2,12 +2,12 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
 import { join } from 'path';
 
-// Cargar variables de entorno
+// Load environment variables
 config();
 
 const getDataSourceOptions = (): DataSourceOptions => {
   const baseConfig = {
-    synchronize: false, // Desactivado para migraciones
+    synchronize: false, // Disabled for migrations
     logging: true,
     entities: [join(__dirname, '..', '**', '*.entity{.ts,.js}')],
     migrations: [join(__dirname, '..', 'migrations', '*{.ts,.js}')],
