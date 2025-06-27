@@ -29,7 +29,10 @@ const getDataSourceOptions = (): DataSourceOptions => {
     case 'sqlite':
       return {
         type: 'sqlite',
-        database: process.env.SQLITE_PATH || ':memory:',
+        database:
+          process.env.SQLITE_PATH === ':memory:'
+            ? ':memory:'
+            : join(process.cwd(), process.env.SQLITE_PATH || 'data/sqlite.db'),
         ...baseConfig,
       };
 

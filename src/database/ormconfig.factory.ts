@@ -30,7 +30,7 @@ export const ormConfig = async (
     case 'sqlite':
       return {
         type: 'sqlite',
-        database: configService.get<string>('database.sqlitePath'),
+        database: configService.get<string>('database.database'),
         ...baseConfig,
       };
 

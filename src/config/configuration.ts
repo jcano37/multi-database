@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import { join } from 'path';
 
 export const appConfig = registerAs('app', () => ({
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -31,7 +32,10 @@ export const databaseConfig = registerAs('database', () => {
     },
     sqlite: {
       type: 'sqlite',
-      database: process.env.SQLITE_PATH || ':memory:',
+      database:
+        process.env.SQLITE_PATH === ':memory:'
+          ? ':memory:'
+          : join(process.cwd(), process.env.SQLITE_PATH || 'data/sqlite.db'),
     },
   };
 

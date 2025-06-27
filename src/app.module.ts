@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
-import { ExampleModule } from './modules/example/example.module';
-import { appConfig, databaseConfig } from './config/configuration';
-import { validationSchema } from './config/validation.schema';
+import { DatabaseModule } from '@database/database.module';
+import { ExampleModule } from '@modules/example/example.module';
+import { appConfig, databaseConfig } from '@config/configuration';
+import { validationSchema } from '@config/validation.schema';
 
 @Module({
   imports: [
